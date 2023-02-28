@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-//import { nanoid } from 'nanoid';
 import { ContactForm } from './ContactForm/ContactForm';
 import { ContactList } from './ContactList/ContactList';
 import { Filter } from './Filter/Filter';
@@ -12,6 +11,21 @@ export class App extends Component {
     contacts: [],
     filter: '',
   };
+  componentDidMount() {
+    const saveContacts = localStorage.getItem('contact')
+    const parseContacts = JSON.parse(saveContacts);
+    if (saveContacts !== null) {
+      this.setState({ contacts: parseContacts });
+      return;
+    }
+   
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.contacts !== this.state.contacts) {
+      localStorage.setItem('contact', JSON.stringify(this.state.contacts))
+    }
+  }
 
   addContact = newContact => {
     this.state.contacts.filter(contact => contact.name === newContact.name)
